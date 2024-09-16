@@ -13,9 +13,10 @@ public class Scheduler {
                 String fName = commandBody[3];
                 String lName = commandBody[4];
                 Date dob = new Date(commandBody[5]);
-                String provider = commandBody[6];
+                Provider provider = Provider.valueOf(commandBody[6]);
 
-                Timeslot ts = Timeslot.values()[timeslot];
+
+                
 
                 
 
