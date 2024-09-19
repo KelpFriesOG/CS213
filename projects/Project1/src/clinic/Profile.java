@@ -50,6 +50,12 @@ public class Profile implements Comparable<Profile> {
         return false;
     }
 
+    public boolean isValid() {
+        // Ensure that the provided date is valid and the birthday is not today
+        // or in the future.
+        return dob.isValid() && dob.compareTo(new Date()) != 0 && dob.compareTo(new Date()) != 1;
+    }
+
     @Override
     public int compareTo(Profile other) {
 

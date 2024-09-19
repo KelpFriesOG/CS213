@@ -3,14 +3,20 @@ public class List {
     private Appointment[] appointments;
     private int size; // number of appointments in the array
 
-    public static int NOT_FOUND = -1;
-    public static int INIT_CAPACITY = 4;
-    public static int N_EXPAND = 4;
+    public static final int NOT_FOUND = -1;
+    public static final int INIT_CAPACITY = 4;
+    public static final int N_EXPAND = 4;
 
-
+    // No-arg constructor
     public List() {
         appointments = new Appointment[INIT_CAPACITY]; // initial capacity
         size = 0;
+    }
+
+    // Copy constructor
+    public List(List list) {
+        this.appointments = list.appointments.clone();
+        this.size = list.size;
     }
 
     private int find(Appointment appointment) {
@@ -40,9 +46,15 @@ public class List {
     }
 
     public void add(Appointment appointment) {
+        
+        
+        // Extract the 
+        
         if (size == appointments.length) {
             grow();
         }
+
+
         appointments[size] = appointment;
         size++;
     }

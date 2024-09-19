@@ -6,7 +6,7 @@ public enum Specialty {
 
     private final double charge;
 
-    Specialty(double charge) {
+    private Specialty(double charge) {
         this.charge = charge;
     }
 

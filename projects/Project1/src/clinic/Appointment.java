@@ -20,6 +20,14 @@ public class Appointment implements Comparable<Appointment> {
         this.provider = provider;
     }
 
+    public boolean isValid(){
+
+        // In order for the appointment to be valid the date of the appointment must be in the future
+        // and the date within the profile must be valid.
+
+        return patient.isValid() && date.compareTo(new Date()) > 0;
+
+    }
 
     // Getters and setters
     @Override

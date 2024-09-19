@@ -10,7 +10,7 @@ public enum Timeslot {
     private final int minute;
 
     // Constructor for the enum
-    Timeslot(int hour, int minute) {
+    private Timeslot(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
     }
