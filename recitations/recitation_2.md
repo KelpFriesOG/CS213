@@ -12,4 +12,7 @@ Goal representation: `dd/mm/yyyy HH:MM AM/PM [patient.fname] [patient.lname] [pa
 
 **The `Visit` class is only used when PS is called.**
 
-**After `PS` is called then you **
+**After `PS` is called then you**
+
+Java decides what method to run based on the declared type of
+the object calling it.

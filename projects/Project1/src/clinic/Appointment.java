@@ -20,16 +20,44 @@ public class Appointment implements Comparable<Appointment> {
         this.provider = provider;
     }
 
+    /**
+     * Checks if the appointment is valid.
+     * The appointment is valid if the patient profile is valid (has a valid dob) and the appointment
+     * date is in the future
+     * @return a boolean representing the validity of the date
+     * @author Kalpesh Chavan (krc177)
+     */
     public boolean isValid(){
 
         // In order for the appointment to be valid the date of the appointment must be in the future
         // and the date within the profile must be valid.
 
+        // Ensure that the date is valid
+        if(!date.isValid()){
+            return false;
+        }
+
+        // Ensure that the date  is not on Saturday or Sunday
+        if(date.isWeekend()){
+            return false;
+        }
+
+        // Ensure that the date is not within six months
+        if(date.isWithinSixMonths()){
+            return false;
+        }
+
+        // Ensure that the patient profile is valid (i.e. their date of birth is valid),
+        // and that the date is in the future.
         return patient.isValid() && date.compareTo(new Date()) > 0;
 
     }
 
     // Getters and setters
+
+    /** 
+     * An overrided toString method that generates a representation akin to: "dd/mm/yyyy HH:MM AM/PM [patient.fname] [patient.lname] [patient.dob in dd/mm/yyyy form]"
+    */
     @Override
     public String toString() {
         return date.toString() + " " + timeslot.toString() + " " + patient.toString() + " " + provider.toString(); 

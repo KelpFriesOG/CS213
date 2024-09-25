@@ -38,7 +38,7 @@ public class Profile implements Comparable<Profile> {
     // Overrided methods
     @Override
     public String toString() {
-        return fname + " " + lname + ", " + dob;
+        return fname + " " + lname + " " + dob;
     }
 
     @Override

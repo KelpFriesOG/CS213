@@ -4,10 +4,11 @@ public class Scheduler {
 
     private void processCommand(String[] commandBody, List appointments) {
 
+        System.out.println(commandBody[0]);
         switch (commandBody[0]) {
 
             case "S":
-                //TODO: Schedule an appointment
+                // Extract portions of the appointment and create respective objects
                 Date apptDate = new Date(commandBody[1]);
                 Timeslot timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])];
                 String fName = commandBody[3];
@@ -15,10 +16,11 @@ public class Scheduler {
                 Date dob = new Date(commandBody[5]);
                 Provider provider = Provider.valueOf(commandBody[6]);
 
+                // Combine objects into an appointment
+                Appointment appt = new Appointment(apptDate, timeslot, new Profile(fName, lName, dob), provider);
 
-                
-
-                
+                // Add appointment to list
+                appointments.add(appt);
 
                 break;
             case "C":
@@ -28,7 +30,11 @@ public class Scheduler {
                 //TODO: Reschedule an existing appointment
                 break;
             case "PA":
-                //TODO: Print all appointments sorted by date, time, then provider's name
+                
+                appointments.sortBy("PA");
+
+                System.out.println(appointments.toString());
+
                 break;
             case "PP":
                 // TODO: Print all appointments sorted by patient (by last name, first name, dob, then appointment date and time)
@@ -60,7 +66,7 @@ public class Scheduler {
 
         String input;
         while (!(input = scanner.nextLine()).equals("Q")) {
-            String[] commandBody = input.split("\\s+");
+            String[] commandBody = input.split(",");
             processCommand(commandBody, appointments);
         }
 

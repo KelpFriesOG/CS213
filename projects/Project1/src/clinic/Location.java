@@ -20,6 +20,10 @@ public enum Location {
         return county;
     }
 
+    public String getZip() {
+        return zip;
+    }
+
     // Override toString for a readable format
     @Override
     public String toString() {

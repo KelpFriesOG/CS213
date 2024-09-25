@@ -76,6 +76,20 @@ public class Date implements Comparable<Date> {
         }
     }
 
+    public boolean isWeekend(){
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isWithinSixMonths(){
+        
+        
+       
+    }
+
     public boolean isValid(){
 
         // Ensure that the month is valid
@@ -129,22 +143,22 @@ public class Date implements Comparable<Date> {
     }
 
     @Override
-    public int compareTo(Date o) {
+    public int compareTo(Date other) {
         // The date of birth is compared in reverse chronological order ( 10/27/2002 < 09/08/2008)
         // The earlier dates come first (earlier dates are considered 'lesser' than the later dates)
         
         // Compare years first
-        if (year != o.year) {
-            return year - o.year; // Returns negative if this.year < o.year, positive if this.year > o.year
+        if (year != other.year) {
+            return year - other.year; // Returns negative if this.year < other.year, positive if this.year > other.year
         }
 
         // Compare months next
-        if (month != o.month) {
-            return month - o.month; // Returns negative if this.month < o.month, positive if this.month > o.month
+        if (month != other.month) {
+            return month - other.month; // Returns negative if this.month < other.month, positive if this.month > other.month
         }
 
         // Compare days last
-        return day - o.day; // Returns negative if this.day < o.day, positive if this.day > o.day, or zero if days are equal
+        return day - other.day; // Returns negative if this.day < other.day, positive if this.day > other.day, or zero if days are equal
     }
         
 }
