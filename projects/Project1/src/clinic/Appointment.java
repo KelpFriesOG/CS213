@@ -1,3 +1,4 @@
+import java.util.Calendar;
 public class Appointment implements Comparable<Appointment> {
     private Date date;
     private Timeslot timeslot;
@@ -37,13 +38,23 @@ public class Appointment implements Comparable<Appointment> {
             return false;
         }
 
-        // Ensure that the date  is not on Saturday or Sunday
+        // Ensure the timeslot exists
+        if(timeslot == null){
+            return false;
+        }
+
+        // Ensure that the date is not on Saturday or Sunday
         if(date.isWeekend()){
             return false;
         }
 
-        // Ensure that the date is not within six months
-        if(date.isWithinSixMonths()){
+        // Ensure that the date is within six months
+        Calendar today = Calendar.getInstance();
+        // Calculate 12 * n_years + n_months for both
+        int total_months_today = today.get(Calendar.YEAR) * 12 + today.get(Calendar.MONTH);
+        int total_months_date = date.getYear() * 12 + date.getMonth();
+
+        if(Math.abs(total_months_today - total_months_date) >= 6){
             return false;
         }
 

@@ -27,8 +27,7 @@ public enum Provider {
 
     @Override
     public String toString() {
-        return "[" + this.name() + ", " + this.location.name() + ", " + this.location.getCounty() +
-                " " + this.location.getZip() + ", " + this.specialty.name() + "]"; 
+        return "[" + name() + ", " + location.toString() + ", " + specialty.toString() + "]";
     }
 
 }

@@ -5,22 +5,31 @@ public class Scheduler {
     private void processCommand(String[] commandBody, List appointments) {
 
         System.out.println(commandBody[0]);
+
+        
         switch (commandBody[0]) {
 
             case "S":
-                // Extract portions of the appointment and create respective objects
-                Date apptDate = new Date(commandBody[1]);
-                Timeslot timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])];
-                String fName = commandBody[3];
-                String lName = commandBody[4];
-                Date dob = new Date(commandBody[5]);
-                Provider provider = Provider.valueOf(commandBody[6]);
+                
+                try{
+                    // Extract portions of the appointment and create respective objects
+                    Date apptDate = new Date(commandBody[1]);
+                    Timeslot timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])];
+                    String fName = format(commandBody[3]);
+                    String lName = format(commandBody[4]);
+                    Date dob = new Date(commandBody[5]);
+                    Provider provider = Provider.valueOf(commandBody[6].toUpperCase());
 
-                // Combine objects into an appointment
-                Appointment appt = new Appointment(apptDate, timeslot, new Profile(fName, lName, dob), provider);
+                    // Combine objects into an appointment
+                    Appointment appt = new Appointment(apptDate, timeslot, new Profile(fName, lName, dob), provider);
 
-                // Add appointment to list
-                appointments.add(appt);
+                    // Add appointment to list
+                    appointments.add(appt);
+
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getMessage());
+                    return;
+                }
 
                 break;
             case "C":
@@ -53,7 +62,25 @@ public class Scheduler {
                 System.out.println("Invalid command.");
 
         }
+    
+        
 
+    }
+
+    private String format(String s) {
+        
+        // If the string is empty return it
+        if (s.isEmpty()) {
+            return s;
+        }
+
+        // If the string is a single character return it in upper case
+        if (s.length() == 1) {
+            return s.toUpperCase();
+        }
+
+        // Otherwise return the first character in upper case and the rest in lower case
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
     }
 
     public void run() {

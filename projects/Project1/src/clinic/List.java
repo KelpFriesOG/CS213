@@ -51,13 +51,34 @@ public class List {
 
     public void add(Appointment appointment) {
         
+        // If there is no room, grow first!
         if (size == appointments.length) {
             grow();
         }
 
+        // Ensure the appointment is valid and profile is valid
+        if (!appointment.isValid() || !appointment.getPatient().isValid()) {
+            return;
+        }
+
+        // Before adding the appointment, check if the doctor's timeslot for the day is already full
+        if (this.size > 0) {
+            for (int i = 0; i < size; i++) {
+                boolean timeslotIsSame = appointments[i].getTimeslot().equals(appointment.getTimeslot());
+                boolean dayIsSame = appointments[i].getDate().equals(appointment.getDate());
+                boolean providerIsSame = appointments[i].getProvider().equals(appointment.getProvider());
+                
+                // If all three conditions are true then the timeslot is full on that day for that provider
+                if (timeslotIsSame && dayIsSame && providerIsSame) {
+                    return;
+                }
+            }
+        } 
+
+        
 
         appointments[size] = appointment;
-        size++;
+        size+=1;
     }
 
     public void remove(Appointment appointment) {
@@ -77,21 +98,6 @@ public class List {
         size--;
     }
 
-    public void printByPatient() {
-        // implement sorting by patient profile, date/timeslot
-        // for now, just print the appointments
-        for (int i = 0; i < size; i++) {
-            System.out.println(appointments[i]);
-        }
-    }
-
-    public void printByLocation() {
-        // implement sorting by location
-        // for now, just print the appointments
-        for (int i = 0; i < size; i++) {
-            System.out.println(appointments[i]);
-        }
-    }
 
     public void sortBy(String fields) {
 

@@ -20,23 +20,36 @@ public class Date implements Comparable<Date> {
     }
 
     // Parameterized Constructor
-    public Date(int year, int month, int day) {
+    public Date(int year, int month, int day) throws IllegalArgumentException {
         this.year = year;
         this.month = month;
         this.day = day;
+
+        // Ensure date is valid, if not throw exception
+        if (!isValid()) {
+            throw new IllegalArgumentException("Invalid date");
+        }
+
+        calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
     }
 
     // Parameterized Constructor for date string
     public Date(String dateString){
-        calendar = Calendar.getInstance();
 
         // Parse the string "mm/dd/yyyy"
         String[] parts = dateString.split("/");
-        this.month = Integer.parseInt(parts[0]) - 1;
+        this.month = Integer.parseInt(parts[0]);
         this.day = Integer.parseInt(parts[1]);
         this.year = Integer.parseInt(parts[2]);
 
-        calendar.set(year, month, day);
+        // Ensure date is valid, if not throw exception
+        if (!isValid()) {
+            throw new IllegalArgumentException("Invalid date");
+        }
+
+        calendar = Calendar.getInstance();
+        calendar.set(year, month-1, day);
     }
 
     // Getters and Setters
@@ -83,13 +96,7 @@ public class Date implements Comparable<Date> {
             return false;
         }
     }
-
-    public boolean isWithinSixMonths(){
-        
-        
-       
-    }
-
+    
     public boolean isValid(){
 
         // Ensure that the month is valid

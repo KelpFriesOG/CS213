@@ -16,6 +16,6 @@ public enum Specialty {
 
     @Override
     public String toString() {
-        return name() + " ($" + charge + ")";
+        return name();
     }
 }
