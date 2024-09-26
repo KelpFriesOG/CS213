@@ -51,10 +51,10 @@ public class Appointment implements Comparable<Appointment> {
         // Ensure that the date is within six months
         Calendar today = Calendar.getInstance();
         // Calculate 12 * n_years + n_months for both
-        int total_months_today = today.get(Calendar.YEAR) * 12 + today.get(Calendar.MONTH);
+        int total_months_today = today.get(Calendar.YEAR) * 12 + (today.get(Calendar.MONTH) + 1);
         int total_months_date = date.getYear() * 12 + date.getMonth();
 
-        if(Math.abs(total_months_today - total_months_date) >= 6){
+        if(Math.abs(total_months_today - total_months_date) > 6){
             return false;
         }
 

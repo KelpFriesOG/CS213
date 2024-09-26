@@ -41,7 +41,7 @@ public class List {
             newAppointments[i] = this.appointments[i];
         }
 
-        appointments = newAppointments;
+        this.appointments = newAppointments;
     }
 
 
@@ -58,6 +58,11 @@ public class List {
 
         // Ensure the appointment is valid and profile is valid
         if (!appointment.isValid() || !appointment.getPatient().isValid()) {
+            return;
+        }
+
+        // Before adding the appointment, ensure that an identical appointment does not already exist
+        if(contains(appointment)){
             return;
         }
 
@@ -81,6 +86,13 @@ public class List {
         size+=1;
     }
 
+    public Appointment get(int index) {
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        return appointments[index];
+    }
+
     public void remove(Appointment appointment) {
         // Remove without arraycopy
 
@@ -101,26 +113,11 @@ public class List {
 
     public void sortBy(String fields) {
 
-        int n = this.appointments.length;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                Appointment a = appointments[i];
-                Appointment b = appointments[j];
-                if (fields.equals("PA")) {
-                    // Sort by appointment date, then time, then provider name. (not default behavior)
-                    if (compareWith(a, b, fields) < 0) {
-                        Appointment temp = appointments[j];
-                        appointments[j] = appointments[j + 1];
-                        appointments[j + 1] = temp;
-                    }
-                } else if (fields.equals("PP")) {
-                    if (compareWith(a, b, fields) < 0) {
-                        Appointment temp = appointments[j];
-                        appointments[j] = appointments[j + 1];
-                        appointments[j + 1] = temp;
-                    }
-                } else if (fields.equals("PL")) {
-                    if (compareWith(a, b, fields) < 0) {
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - i - 1; j++) {
+                if (appointments[j] != null && appointments[j + 1] != null) {
+                    if (compareWith(appointments[j], appointments[j + 1], fields) > 0) {
+                        // Swap appointments[j] and appointments[j+1]
                         Appointment temp = appointments[j];
                         appointments[j] = appointments[j + 1];
                         appointments[j + 1] = temp;

@@ -2,9 +2,25 @@ import java.util.Scanner;
 
 public class Scheduler {
 
+    private Appointment extractAppointment(String[] commandBody) throws IllegalArgumentException {
+
+        // Extract portions of the appointment and create respective objects
+        Date apptDate = new Date(commandBody[1]);
+        Timeslot timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])-1];
+        String fName = format(commandBody[3]);
+        String lName = format(commandBody[4]);
+        Date dob = new Date(commandBody[5]);
+        Provider provider = Provider.valueOf(commandBody[6].toUpperCase());
+
+        // Combine objects into an appointment
+        Appointment appt = new Appointment(apptDate, timeslot, new Profile(fName, lName, dob), provider);
+
+        return appt;
+    }
+
     private void processCommand(String[] commandBody, List appointments) {
 
-        System.out.println(commandBody[0]);
+        // System.out.println(commandBody[0]);
 
         
         switch (commandBody[0]) {
@@ -12,16 +28,7 @@ public class Scheduler {
             case "S":
                 
                 try{
-                    // Extract portions of the appointment and create respective objects
-                    Date apptDate = new Date(commandBody[1]);
-                    Timeslot timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])];
-                    String fName = format(commandBody[3]);
-                    String lName = format(commandBody[4]);
-                    Date dob = new Date(commandBody[5]);
-                    Provider provider = Provider.valueOf(commandBody[6].toUpperCase());
-
-                    // Combine objects into an appointment
-                    Appointment appt = new Appointment(apptDate, timeslot, new Profile(fName, lName, dob), provider);
+                    Appointment appt = extractAppointment(commandBody);
 
                     // Add appointment to list
                     appointments.add(appt);
@@ -33,10 +40,40 @@ public class Scheduler {
 
                 break;
             case "C":
-                //TODO: Cancel an existing appointment
+                // Cancel an existing appointment
+                try {
+                    Appointment appt = extractAppointment(commandBody);
+                    if (appointments.contains(appt)) {
+                        appointments.remove(appt);
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getMessage());
+                    return;
+                }
+
                 break;
             case "R":
-                //TODO: Reschedule an existing appointment
+                //Reschedule an existing appointment
+                try {
+                    Appointment appt = extractAppointment(commandBody);
+                    // Find an appointment in the list with the same profile, day, and provider
+                    for (int i = 0; i < appointments.getSize(); i++) {
+                        Appointment current_appt = appointments.get(i);
+                        if (appt.getDate().equals(current_appt.getDate()) && appt.getProvider().equals(appt.getProvider())
+                        && appt.getPatient().equals(current_appt.getPatient())) {
+                            // Remove the old appointment
+                            appointments.remove(current_appt);
+                            // Add the new appointment
+                            appointments.add(appt);       
+                            // I cannot modify the old appointment as it should be immmutable.                     
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                    return;
+                }
+
                 break;
             case "PA":
                 
@@ -46,16 +83,28 @@ public class Scheduler {
 
                 break;
             case "PP":
-                // TODO: Print all appointments sorted by patient (by last name, first name, dob, then appointment date and time)
+                
+                appointments.sortBy("PP");
+
+                System.out.println(appointments.toString());
+
                 break;
             case "PL":
-                // TODO: Print all appointments sorted by county name, then the appointment date and time
+                
+                appointments.sortBy("PL");
+
+                System.out.println(appointments.toString());
+
                 break;
             case "PS":
-                // TODO: Print the billing statments for all patients assuming all appointments have been completed
+                
+                appointments.sortBy("PS");
+
+                System.out.println(appointments.toString());
+
                 break;
             case "Q":
-                // TODO: Quit the scheduler
+                // Quit the scheduler
                 break;
 
             default:
