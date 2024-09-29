@@ -38,10 +38,15 @@ public class Scheduler {
             throw new IllegalArgumentException("Appointment date: " + apptDate + " is not within six months.");
         }
 
+        // If the date is in the valid timeframe, still ensure it is not on a Saturday or Sunday
+        if (apptDate.isWeekend()){
+            throw new IllegalArgumentException("Appointment date: " + apptDate + " is Saturday or Sunday.");
+        }
+
         // Deal with a potential timeslot mismatch (error must be customized then rethrown)
         try {
             timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])-1];
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(commandBody[2] + " is not a valid time slot.");
         }
         
@@ -63,7 +68,7 @@ public class Scheduler {
         try {
             provider = Provider.valueOf(commandBody[6].toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(commandBody[6] + "- provider doesn't exist.");
+            throw new IllegalArgumentException(commandBody[6] + " - provider doesn't exist.");
         }
 
         // Combine objects into an appointment
@@ -87,8 +92,13 @@ public class Scheduler {
                     // Add appointment to list
                     appointments.add(appt);
 
+                    System.out.println(appt + " booked.");
+
                 } catch (IllegalArgumentException e) {
-                    if (DEBUG) System.err.println(e.getMessage());
+                    System.out.println(e.getMessage());
+                    return;
+                } catch (AppointmentAlreadyExistsException e) {
+                    System.out.println(e.getMessage());
                     return;
                 }
 
@@ -204,8 +214,6 @@ public class Scheduler {
 
         }
     
-        
-
     }
 
     private String format(String s) {

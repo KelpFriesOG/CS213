@@ -1,4 +1,4 @@
-import java.util.Calendar;
+
 public class Appointment implements Comparable<Appointment> {
     private Date date;
     private Timeslot timeslot;
@@ -19,49 +19,6 @@ public class Appointment implements Comparable<Appointment> {
         this.timeslot = timeslot;
         this.patient = patient;
         this.provider = provider;
-    }
-
-    /**
-     * Checks if the appointment is valid.
-     * The appointment is valid if the patient profile is valid (has a valid dob) and the appointment
-     * date is in the future
-     * @return a boolean representing the validity of the date
-     * @author Kalpesh Chavan (krc177)
-     */
-    public boolean isValid(){
-
-        // In order for the appointment to be valid the date of the appointment must be in the future
-        // and the date within the profile must be valid.
-
-        // Ensure that the date is valid
-        if(!date.isValid()){
-            throw new IllegalArgumentException("Appointment date: " + date + " is not a valid calendar date");
-        }
-
-        // Ensure the timeslot exists
-        if(timeslot == null){
-            return false;
-        }
-
-        // Ensure that the date is not on Saturday or Sunday
-        if(date.isWeekend()){
-            return false;
-        }
-
-        // Ensure that the date is within six months
-        Calendar today = Calendar.getInstance();
-        // Calculate 12 * n_years + n_months for both
-        int total_months_today = today.get(Calendar.YEAR) * 12 + (today.get(Calendar.MONTH) + 1);
-        int total_months_date = date.getYear() * 12 + date.getMonth();
-
-        if(Math.abs(total_months_today - total_months_date) > 6){
-            return false;
-        }
-
-        // Ensure that the patient profile is valid (i.e. their date of birth is valid),
-        // and that the date is in the future.
-        return patient.isValid() && date.compareTo(new Date()) > 0;
-
     }
 
     // Getters and setters

@@ -49,21 +49,16 @@ public class List {
         return find(appointment) != -1;
     }
 
-    public void add(Appointment appointment) {
+    public void add(Appointment appointment) throws AppointmentAlreadyExistsException {
         
         // If there is no room, grow first!
         if (size == appointments.length) {
             grow();
         }
 
-        // Ensure the appointment is valid and profile is valid
-        if (!appointment.isValid() || !appointment.getPatient().isValid()) {
-            return;
-        }
-
         // Before adding the appointment, ensure that an identical appointment does not already exist
         if(contains(appointment)){
-            return;
+            throw new AppointmentAlreadyExistsException(appointment.getPatient().toString() + " has an existing appointment at the same time slot.");
         }
 
         // Before adding the appointment, check if the doctor's timeslot for the day is already full
@@ -75,7 +70,8 @@ public class List {
                 
                 // If all three conditions are true then the timeslot is full on that day for that provider
                 if (timeslotIsSame && dayIsSame && providerIsSame) {
-                    return;
+                    throw new AppointmentAlreadyExistsException(
+                        appointments[i].getProvider() + " is not available at slot "+(appointments[i].getTimeslot().ordinal()+1) + ".");
                 }
             }
         } 
