@@ -39,6 +39,19 @@ public class Visit {
         this.next.next = null;
     }
 
+    // Method that recursively calculates the total charges of the visits based on provider specialty
+    public double charge() {
+        // Get charge based on the specialty
+        double charge = appointment.getProvider().getSpecialty().getCharge();
+        if (next == null) {
+            // As this is the base case, simply return the charge
+            return charge;
+        } else {
+            // Otherwise send a recursive call to the next node and calculate the sum of the charges
+            return charge + next.charge();
+        }
+    }
+
     // Override toString to display the appointment
     @Override
     public String toString() {

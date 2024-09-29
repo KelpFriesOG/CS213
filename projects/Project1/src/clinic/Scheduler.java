@@ -188,9 +188,20 @@ public class Scheduler {
 
                 }
 
+                break;
+
             case "PS":
                 
                 try{
+
+                    // First take all appointments and organize them into a linked list
+                    Visit head = new Visit(appointments.get(0));
+                    Visit cur = head;
+
+                    for (int i = 1; i < appointments.getSize(); i++) {
+                        cur.setNext(new Visit(appointments.get(i)));
+                        cur = cur.getNext();
+                    }
 
                     appointments.sortBy("PS");
 

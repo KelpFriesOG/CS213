@@ -18,6 +18,7 @@ public class MedicalRecord{
         size = patients.length;
     }
 
+    
 
     private void grow() {
 
