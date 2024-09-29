@@ -26,8 +26,8 @@ public enum Timeslot {
 
     @Override
     public String toString() {
-        // I used a ternary expression to make quick work of the AM/PM
-        return this.hour + ":" + this.minute + " " + (this.hour < 12 ? "AM" : "PM");
+        // I used a ternary expression to make quick work of formatting
+        return (this.hour < 12 ? this.hour : this.hour - 12) + ":" + (this.minute == 0 ? "00" : this.minute) + " " + (this.hour < 12 ? "AM" : "PM");
     }
 }
 
