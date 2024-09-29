@@ -35,7 +35,7 @@ public class Appointment implements Comparable<Appointment> {
 
         // Ensure that the date is valid
         if(!date.isValid()){
-            return false;
+            throw new IllegalArgumentException("Appointment date: " + date + " is not a valid calendar date");
         }
 
         // Ensure the timeslot exists

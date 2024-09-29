@@ -12,10 +12,13 @@ public class Profile implements Comparable<Profile> {
     }
 
     // Parameterized constructor
-    public Profile(String fname, String lname, Date dob) {
+    public Profile(String fname, String lname, Date dob) throws IllegalArgumentException {
         this.fname = fname;
         this.lname = lname;
         this.dob = dob;
+
+        isValid();
+
     }
 
     // Getters and setters
@@ -50,10 +53,17 @@ public class Profile implements Comparable<Profile> {
         return false;
     }
 
-    public boolean isValid() {
+    public boolean isValid() throws IllegalArgumentException {
         // Ensure that the provided date is valid and the birthday is not today
         // or in the future.
-        return dob.isValid() && dob.compareTo(new Date()) != 0 && dob.compareTo(new Date()) != 1;
+        
+
+
+        if (dob.compareTo(new Date()) >= 0) {
+            throw new IllegalArgumentException("Patient dob: " + dob + " is today or a date after today.");
+        }
+
+        return true;
     }
 
     @Override

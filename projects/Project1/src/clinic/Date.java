@@ -27,7 +27,7 @@ public class Date implements Comparable<Date> {
 
         // Ensure date is valid, if not throw exception
         if (!isValid()) {
-            throw new IllegalArgumentException("Invalid date");
+            throw new IllegalArgumentException(toString() + " is not a valid calendar date.");
         }
 
         calendar = Calendar.getInstance();
@@ -45,7 +45,7 @@ public class Date implements Comparable<Date> {
 
         // Ensure date is valid, if not throw exception
         if (!isValid()) {
-            throw new IllegalArgumentException("Invalid date");
+            throw new IllegalArgumentException(dateString + " is not a valid calendar date.");
         }
 
         calendar = Calendar.getInstance();

@@ -2,18 +2,72 @@ import java.util.Scanner;
 
 public class Scheduler {
 
+    private static final boolean DEBUG = true;
     private Appointment extractAppointment(String[] commandBody) throws IllegalArgumentException {
 
-        // Extract portions of the appointment and create respective objects
-        Date apptDate = new Date(commandBody[1]);
-        Timeslot timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])-1];
+        // Create variables that could potential throw exceptions as nulls
+        Date apptDate = null;
+        Date dob = null;
+        Timeslot timeslot = null;
+        Provider provider = null;
+        Profile patient = null;
+
+        // Create variables for the first and last name (which cannot be incorrect)
         String fName = format(commandBody[3]);
         String lName = format(commandBody[4]);
-        Date dob = new Date(commandBody[5]);
-        Provider provider = Provider.valueOf(commandBody[6].toUpperCase());
+
+        // Deal with potential invalid calendar date for appointment
+        try {
+            apptDate = new Date(commandBody[1]);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Appointment date: " + e.getMessage());
+        }
+
+        // Even if the appt date is valid, ensure it is in the future
+        if (apptDate.compareTo(new Date()) <= 0) {
+            throw new IllegalArgumentException("Appointment date: " + apptDate + " is today or a date before today.");
+        }
+
+        // If the date is in the future, still ensure that it is within six months
+        Date today = new Date();
+        int yearDiff = apptDate.getYear() - today.getYear();
+        int monthDiff = apptDate.getMonth() - today.getMonth();
+        int totalDiff = yearDiff * 12 + monthDiff;
+        
+        if (totalDiff > 6) {
+            throw new IllegalArgumentException("Appointment date: " + apptDate + " is not within six months.");
+        }
+
+        // Deal with a potential timeslot mismatch (error must be customized then rethrown)
+        try {
+            timeslot = Timeslot.values()[Integer.parseInt(commandBody[2])-1];
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(commandBody[2] + " is not a valid time slot.");
+        }
+        
+        // Deal with a potential invalid calendar date for dob
+        try{
+            dob = new Date(commandBody[5]);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Patient dob: " + e.getMessage());
+        }
+        
+        // Deal with potential invalid data for profile (i.e. dob is today or in the future)
+        try {
+            patient = new Profile(fName, lName, dob);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        // Deal with potential invalid provider name
+        try {
+            provider = Provider.valueOf(commandBody[6].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(commandBody[6] + "- provider doesn't exist.");
+        }
 
         // Combine objects into an appointment
-        Appointment appt = new Appointment(apptDate, timeslot, new Profile(fName, lName, dob), provider);
+        Appointment appt = new Appointment(apptDate, timeslot, patient, provider);
 
         return appt;
     }
@@ -34,7 +88,7 @@ public class Scheduler {
                     appointments.add(appt);
 
                 } catch (IllegalArgumentException e) {
-                    System.err.println(e.getMessage());
+                    if (DEBUG) System.err.println(e.getMessage());
                     return;
                 }
 
@@ -70,45 +124,83 @@ public class Scheduler {
                         }
                     }
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
+                    if (DEBUG) System.err.println(e.getMessage());
                     return;
                 }
 
                 break;
             case "PA":
                 
-                appointments.sortBy("PA");
+                try{
 
-                System.out.println(appointments.toString());
+                    appointments.sortBy("PA");
+
+                    System.out.println(appointments.toString());
+
+                } catch (IllegalArgumentException e) {
+
+                    System.err.println(e.getMessage());
+                    return;
+
+                }
 
                 break;
+
             case "PP":
                 
-                appointments.sortBy("PP");
+                try{
 
-                System.out.println(appointments.toString());
+                    appointments.sortBy("PP");
+
+                    System.out.println(appointments.toString());
+
+                } catch (IllegalArgumentException e) {
+
+                    System.err.println(e.getMessage());
+                    return;
+
+                }
 
                 break;
+
             case "PL":
                 
-                appointments.sortBy("PL");
+                try{
 
-                System.out.println(appointments.toString());
+                    appointments.sortBy("PL");
 
-                break;
+                    System.out.println(appointments.toString());
+
+                } catch (IllegalArgumentException e) {
+
+                    System.err.println(e.getMessage());
+                    return;
+
+                }
+
             case "PS":
                 
-                appointments.sortBy("PS");
+                try{
 
-                System.out.println(appointments.toString());
+                    appointments.sortBy("PS");
+
+                    System.out.println(appointments.toString());
+
+                } catch (IllegalArgumentException e) {
+
+                    System.err.println(e.getMessage());
+                    return;
+
+                }
 
                 break;
+
             case "Q":
                 // Quit the scheduler
                 break;
 
             default:
-                System.out.println("Invalid command.");
+                System.out.println("Invalid command!");
 
         }
     
